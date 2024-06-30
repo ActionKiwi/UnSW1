@@ -8,11 +8,11 @@
                 <a href="/team">Teams</a>
             </div>
         </div>
-        <div id="right_navigation">
+        <!-- <div id="right_navigation">
             <div id="profile">
                 <a href="/profile">Profile</a>
             </div>
-        </div>
+        </div> -->
     </nav>
     <div id="container">
         <div class="team">
