@@ -1,3 +1,8 @@
+<script>
+    import Teambuilder from '$lib/Teambuilder.svelte';
+    let teams=[]
+</script>
+
 <body>
     <nav>
         <div id="left_navigation">
@@ -14,16 +19,14 @@
             </div>
         </div> -->
     </nav>
-    <div id="container">
-        <div class="team">
-            <p>Team name goes here</p>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-            <button disabled class="add_pokemon_to_team hidebyDefault" on:click={unhidemodal(openPokemon)}></button>
-        </div>
-        <button id="new_team">+ Create a new team</button>
-    </div>
+    <ul class="teams">
+        {#each teams as team}
+            <li class="team">
+                <input type="text" placeholder="Team Name" bind:value={team.name}>
+                <Teambuilder></Teambuilder>
+            </li>
+        {/each}
+    </ul>
+    <button id="new_team" on:click={() => teams = [...teams, {name:"Untitled Team", members:[]}]}>+ Create a new team</button>
 </body>
+

@@ -35,10 +35,10 @@
     </div>
     <div id="treset">
         <div class="select_team">
-            <button id="pop_up" on:click={modalOpen('team1')}>Select Team 1</button>
+            <button id="pop_up" on:click={openModal('team1')}>Select Team 1</button>
         </div>
         <div class="select_team">
-            <button id="pop_up" on:click={modalOpen('team2')}>Select Team 2</button>
+            <button id="pop_up" on:click={openModal('team2')}>Select Team 2</button>
         </div>
         <button>Reset</button>
     </div>
@@ -58,8 +58,9 @@
                 <button disabled class="select_pokemon_from_team" on:click={starting_position('team1', team, pokemon, index)}></button>
             </div>
         {/if}
-    {/if}
     {:else}
+
+    {/if}
 </Modal>
 
 <Modal bind:open={modalOpen}>
