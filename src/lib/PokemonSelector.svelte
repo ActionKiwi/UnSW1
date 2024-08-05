@@ -86,10 +86,14 @@
 
 	async function checkNatures() {
 		selectedNature = await $pokedex.getNatureByName(selectNature);
+		attacknatureValue = 1;
+		defensenatureValue = 1;
+		sattacknatureValue = 1;
+		sdefensenatureValue = 1;
+		speednatureValue = 1;
 		// console.log(selectedNature);
 		if (selectNature != null) {
 			if (selectedNature.name == 'lonely') {
-				// console.log('lonely checked true');
 				attacknatureValue = 1.1;
 				defensenatureValue = 0.9;
 				sattacknatureValue = 1;
@@ -120,8 +124,6 @@
 				sdefensenatureValue = 1;
 				defensenatureValue = 1;
 			}
-
-			console.log('natureValue for attack', attacknatureValue);
 
 			if (selectedNature.name == 'bold') {
 				defensenatureValue = 1.1;
@@ -155,8 +157,6 @@
 				speednatureValue = 0.9;
 			}
 
-			console.log('natureValue for attack 2', attacknatureValue);
-
 			if (selectedNature.name == 'modest') {
 				defensenatureValue = 1;
 				attacknatureValue = 0.9;
@@ -188,8 +188,6 @@
 				sdefensenatureValue = 1;
 				speednatureValue = 0.9;
 			}
-
-			console.log('natureValue for attack 3', attacknatureValue);
 
 			if (selectedNature.name == 'calm') {
 				defensenatureValue = 1;
@@ -223,8 +221,6 @@
 				speednatureValue = 0.9;
 			}
 
-			console.log('natureValue for attack 4', attacknatureValue);
-
 			if (selectedNature.name == 'timid') {
 				defensenatureValue = 1;
 				attacknatureValue = 0.9;
@@ -257,27 +253,27 @@
 				speednatureValue = 1.1;
 			}
 
-			console.log('natureValue for attack 5', attacknatureValue);
-
-			if (selectedNature.name == ('hardy' || 'docile' || 'serious' || 'bashful' || 'quirky')) {
+			if (
+				selectedNature.name == 'hardy' ||
+				selectedNature.name == 'docile' ||
+				selectedNature.name == 'serious' ||
+				selectedNature.name == 'bashful' ||
+				selectedNature.name == 'quirky'
+			) {
 				attacknatureValue = 1;
 				defensenatureValue = 1;
 				sattacknatureValue = 1;
 				sdefensenatureValue = 1;
 				speednatureValue = 1;
 			}
-
-			console.log('natureValue for attack 6', attacknatureValue);
 		}
 
-		// console.log('decreased', selectedNature.decreased_stat);
-		// console.log('increased', selectedNature.increased_stat);
-		// console.log('selectedNature', selectedNature);
-		// console.log('natureValue for attack end', attacknatureValue);
-		// console.log('natureValue for defense', defensenatureValue);
-		// console.log('natureValue for special attack', sattacknatureValue);
-		// console.log('natureValue for special defense', sdefensenatureValue);
-		// console.log('natureValue for speed', speednatureValue);
+		console.log('selectedNature', selectedNature);
+		console.log('natureValue for attack', attacknatureValue);
+		console.log('natureValue for defense', defensenatureValue);
+		console.log('natureValue for special attack', sattacknatureValue);
+		console.log('natureValue for special defense', sdefensenatureValue);
+		console.log('natureValue for speed', speednatureValue);
 	}
 
 	function updateStatByEVIV() {
@@ -443,92 +439,6 @@
 			speedIV = 0;
 		}
 
-		// statToHealth_IV = healthIV / 2;
-		// statToAttack_IV = attackIV / 2;
-		// statToDefense_IV = defenseIV / 2;
-		// statToSAttack_IV = s_attackIV / 2;
-		// statToSDefense_IV = s_defenseIV / 2;
-		// statToSpeed_IV = speedIV / 2;
-
-		// statToHealth_IV = Math.floor(statToHealth_IV);
-		// statToAttack_IV = Math.floor(statToAttack_IV);
-		// statToDefense_IV = Math.floor(statToDefense_IV);
-		// statToSAttack_IV = Math.floor(statToSAttack_IV);
-		// statToSDefense_IV = Math.floor(statToSDefense_IV);
-		// statToSpeed_IV = Math.floor(statToSpeed_IV);
-
-		// code for checking if pokemon is equal to level 50 or 100 - just going to be lvl 50 and 100 as these are most
-		// common levels and makes the IV/EV calculation less complicated
-
-		// if (level == 50) {
-		// 	multiplierEV = 8;
-
-		// Calculation
-		// EVs
-		// 	statToHealth_EV = healthEV / multiplierEV;
-		// 	statToAttack_EV = attackEV / multiplierEV;
-		// 	statToDefense_EV = defenseEV / multiplierEV;
-		// 	statToSAttack_EV = s_attackEV / multiplierEV;
-		// 	statToSDefense_EV = s_defenseEV / multiplierEV;
-		// 	statToSpeed_EV = speedEV / multiplierEV;
-
-		// 	statToHealth_EV = Math.floor(statToHealth_EV);
-		// 	statToAttack_EV = Math.floor(statToAttack_EV);
-		// 	statToDefense_EV = Math.floor(statToDefense_EV);
-		// 	statToSAttack_EV = Math.floor(statToSAttack_EV);
-		// 	statToSDefense_EV = Math.floor(statToSDefense_EV);
-		// 	statToSpeed_EV = Math.floor(statToSpeed_EV);
-
-		// 	if (healthEV % multiplierEV >= 4) {
-		// 		statToHealth_EV += 1;
-		// 	}
-
-		// 	if (attackEV % multiplierEV >= 4) {
-		// 		statToAttack_EV += 1;
-		// 	}
-
-		// 	if (defenseEV % multiplierEV >= 4) {
-		// 		statToDefense_EV += 1;
-		// 	}
-
-		// 	if (s_attackEV % multiplierEV >= 4) {
-		// 		statToSAttack_EV += 1;
-		// 	}
-
-		// 	if (s_defenseEV % multiplierEV >= 4) {
-		// 		statToSDefense_EV += 1;
-		// 	}
-
-		// 	if (speedEV % multiplierEV >= 4) {
-		// 		statToSpeed_EV += 1;
-		// 	}
-		// }
-
-		// if (level == 100) {
-		// 	multiplierEV = 4;
-
-		// Calculation
-		// EVs
-		// statToHealth_EV = healthEV / multiplierEV;
-		// statToAttack_EV = attackEV / multiplierEV;
-		// statToDefense_EV = defenseEV / multiplierEV;
-		// statToSAttack_EV = s_attackEV / multiplierEV;
-		// statToSDefense_EV = s_defenseEV / multiplierEV;
-		// statToSpeed_EV = speedEV / multiplierEV;
-
-		// statToHealth_EV = Math.floor(statToHealth_EV);
-		// statToAttack_EV = Math.floor(statToAttack_EV);
-		// statToDefense_EV = Math.floor(statToDefense_EV);
-		// statToSAttack_EV = Math.floor(statToSAttack_EV);
-		// statToSDefense_EV = Math.floor(statToSDefense_EV);
-		// statToSpeed_EV = Math.floor(statToSpeed_EV);
-
-		// the reason why the remainders are removed from lvl 100 is because it is every 4 EV points = 1 stat point
-		// as opposed to lvl 50 where the first stat point requires 4 and afterwards requires 8 per stat point
-		// }
-
-		// console.log(healthEV);
-
 		// formulas from https://bulbapedia.bulbagarden.net/wiki/Stat
 		hpStat = Math.floor(((2 * hpStat + healthEV / 4 + statToHealth_IV) * level) / 100 + level + 10);
 		attackStat = Math.floor(
@@ -549,18 +459,6 @@
 		speedStat = Math.floor(
 			(((2 * speedStat + speedEV / 4 + statToSpeed_IV) * level) / 100 + 5) * speednatureValue
 		);
-		// console.log('hpStat', hpStat);
-		// console.log('level:', level);
-		// console.log('statToHealth_EV', statToHealth_EV);
-		// console.log('statToAttack_EV', statToHealth_IV);
-		// console.log('statToAttack_EV', statToAttack_EV);
-		// console.log('statToAttack_IV', statToAttack_IV);
-		// statToHealth_EV = 0;
-		// statToAttack_EV = 0;
-		// statToDefense_EV = 0;
-		// statToSAttack_EV = 0;
-		// statToSDefense_EV = 0;
-		// statToSpeed_EV = 0;
 	}
 	$: getPokemonData(selection);
 	$: checkNatures(selectNature);
@@ -578,7 +476,11 @@
 			s_defenseIV ||
 			speedIV ||
 			level ||
-			selectNature
+			attacknatureValue ||
+			defensenatureValue ||
+			sattacknatureValue ||
+			sdefensenatureValue ||
+			speednatureValue
 	);
 	// $pokedex.getPokemonsList().then((r) => console.log(r));
 </script>
