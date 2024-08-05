@@ -44,20 +44,7 @@
 	let s_attackIV = null;
 	let s_defenseIV = null;
 	let speedIV = null;
-	let multiplierEV = null;
 	let level = 50;
-	let statToAttack_EV = null;
-	let statToDefense_EV = null;
-	let statToSpeed_EV = null;
-	let statToSAttack_EV = null;
-	let statToSDefense_EV = null;
-	let statToHealth_EV = null;
-	let statToAttack_IV = null;
-	let statToDefense_IV = null;
-	let statToSpeed_IV = null;
-	let statToSAttack_IV = null;
-	let statToSDefense_IV = null;
-	let statToHealth_IV = null;
 	let attacknatureValue = 1;
 	let defensenatureValue = 1;
 	let sattacknatureValue = 1;
@@ -440,24 +427,22 @@
 		}
 
 		// formulas from https://bulbapedia.bulbagarden.net/wiki/Stat
-		hpStat = Math.floor(((2 * hpStat + healthEV / 4 + statToHealth_IV) * level) / 100 + level + 10);
+		hpStat = Math.floor(((2 * hpStat + healthEV / 4 + healthIV) * level) / 100 + level + 10);
 		attackStat = Math.floor(
-			(((2 * attackStat + attackEV / 4 + statToAttack_IV) * level) / 100 + 5) * attacknatureValue
+			(((2 * attackStat + attackEV / 4 + attackIV) * level) / 100 + 5) * attacknatureValue
 		);
 		defenseStat = Math.floor(
-			(((2 * defenseStat + defenseEV / 4 + statToDefense_IV) * level) / 100 + 5) *
-				defensenatureValue
+			(((2 * defenseStat + defenseEV / 4 + defenseIV) * level) / 100 + 5) * defensenatureValue
 		);
 		s_attackStat = Math.floor(
-			(((2 * s_attackStat + s_attackEV / 4 + statToSAttack_IV) * level) / 100 + 5) *
-				sattacknatureValue
+			(((2 * s_attackStat + s_attackEV / 4 + s_attackIV) * level) / 100 + 5) * sattacknatureValue
 		);
 		s_defenseStat = Math.floor(
-			(((2 * s_defenseStat + s_defenseEV / 4 + statToSDefense_IV) * level) / 100 + 5) *
+			(((2 * s_defenseStat + s_defenseEV / 4 + s_defenseIV) * level) / 100 + 5) *
 				sdefensenatureValue
 		);
 		speedStat = Math.floor(
-			(((2 * speedStat + speedEV / 4 + statToSpeed_IV) * level) / 100 + 5) * speednatureValue
+			(((2 * speedStat + speedEV / 4 + speedIV) * level) / 100 + 5) * speednatureValue
 		);
 	}
 	$: getPokemonData(selection);
