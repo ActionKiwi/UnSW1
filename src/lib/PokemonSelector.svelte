@@ -31,14 +31,40 @@
 	let s_attackEV = null;
 	let s_defenseEV = null;
 	let speedEV = null;
-	let evsCountValue = 0;
-	let disableEVInput = false;
+	let evsCountValue = null;
 	let healthEVUpdate = false;
 	let attackEVUpdate = false;
 	let defenseEVUpdate = false;
 	let s_attackEVUpdate = false;
 	let s_defenseEVUpdate = false;
 	let speedEVUpdate = false;
+	let healthIV = null;
+	let attackIV = null;
+	let defenseIV = null;
+	let s_attackIV = null;
+	let s_defenseIV = null;
+	let speedIV = null;
+	let multiplierEV = null;
+	let level = 50;
+	let statToAttack_EV = null;
+	let statToDefense_EV = null;
+	let statToSpeed_EV = null;
+	let statToSAttack_EV = null;
+	let statToSDefense_EV = null;
+	let statToHealth_EV = null;
+	let statToAttack_IV = null;
+	let statToDefense_IV = null;
+	let statToSpeed_IV = null;
+	let statToSAttack_IV = null;
+	let statToSDefense_IV = null;
+	let statToHealth_IV = null;
+	let attacknatureValue = 1;
+	let defensenatureValue = 1;
+	let sattacknatureValue = 1;
+	let sdefensenatureValue = 1;
+	let speednatureValue = 1;
+	let selectNature = null;
+	let selectedNature = null;
 
 	async function getPokemonData() {
 		if (selection) {
@@ -54,36 +80,268 @@
 			defenseStat = savedPokemon.stats[2].base_stat;
 			s_attackStat = savedPokemon.stats[3].base_stat;
 			s_defenseStat = savedPokemon.stats[4].base_stat;
-			speedStat = savedPokemon.stats[4].base_stat;
+			speedStat = savedPokemon.stats[5].base_stat;
 		}
 	}
 
+	async function checkNatures() {
+		selectedNature = await $pokedex.getNatureByName(selectNature);
+		// console.log(selectedNature);
+		if (selectNature != null) {
+			if (selectedNature.name == 'lonely') {
+				// console.log('lonely checked true');
+				attacknatureValue = 1.1;
+				defensenatureValue = 0.9;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'adamant') {
+				attacknatureValue = 1.1;
+				sattacknatureValue = 0.9;
+				defensenatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'naughty') {
+				attacknatureValue = 1.1;
+				sdefensenatureValue = 0.9;
+				defensenatureValue = 1;
+				sattacknatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'brave') {
+				attacknatureValue = 1.1;
+				speednatureValue = 0.9;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				defensenatureValue = 1;
+			}
+
+			console.log('natureValue for attack', attacknatureValue);
+
+			if (selectedNature.name == 'bold') {
+				defensenatureValue = 1.1;
+				attacknatureValue = 0.9;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'impish') {
+				defensenatureValue = 1.1;
+				attacknatureValue = 1;
+				sattacknatureValue = 0.9;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'lax') {
+				defensenatureValue = 1.1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 0.9;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'relaxed') {
+				defensenatureValue = 1.1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 0.9;
+			}
+
+			console.log('natureValue for attack 2', attacknatureValue);
+
+			if (selectedNature.name == 'modest') {
+				defensenatureValue = 1;
+				attacknatureValue = 0.9;
+				sattacknatureValue = 1.1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'mild') {
+				defensenatureValue = 0.9;
+				attacknatureValue = 1;
+				sattacknatureValue = 1.1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'rash') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1.1;
+				sdefensenatureValue = 0.9;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'quiet') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1.1;
+				sdefensenatureValue = 1;
+				speednatureValue = 0.9;
+			}
+
+			console.log('natureValue for attack 3', attacknatureValue);
+
+			if (selectedNature.name == 'calm') {
+				defensenatureValue = 1;
+				attacknatureValue = 0.9;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1.1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'gentle') {
+				defensenatureValue = 0.9;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1.1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'careful') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 0.9;
+				sdefensenatureValue = 1.1;
+				speednatureValue = 1;
+			}
+
+			if (selectedNature.name == 'sassy') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1.1;
+				speednatureValue = 0.9;
+			}
+
+			console.log('natureValue for attack 4', attacknatureValue);
+
+			if (selectedNature.name == 'timid') {
+				defensenatureValue = 1;
+				attacknatureValue = 0.9;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1.1;
+			}
+
+			if (selectedNature.name == 'hasty') {
+				defensenatureValue = 0.9;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1.1;
+			}
+
+			if (selectedNature.name == 'jolly') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 0.9;
+				sdefensenatureValue = 1;
+				speednatureValue = 1.1;
+			}
+
+			if (selectedNature.name == 'naive') {
+				defensenatureValue = 1;
+				attacknatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 0.9;
+				speednatureValue = 1.1;
+			}
+
+			console.log('natureValue for attack 5', attacknatureValue);
+
+			if (selectedNature.name == ('hardy' || 'docile' || 'serious' || 'bashful' || 'quirky')) {
+				attacknatureValue = 1;
+				defensenatureValue = 1;
+				sattacknatureValue = 1;
+				sdefensenatureValue = 1;
+				speednatureValue = 1;
+			}
+
+			console.log('natureValue for attack 6', attacknatureValue);
+		}
+
+		// console.log('decreased', selectedNature.decreased_stat);
+		// console.log('increased', selectedNature.increased_stat);
+		// console.log('selectedNature', selectedNature);
+		// console.log('natureValue for attack end', attacknatureValue);
+		// console.log('natureValue for defense', defensenatureValue);
+		// console.log('natureValue for special attack', sattacknatureValue);
+		// console.log('natureValue for special defense', sdefensenatureValue);
+		// console.log('natureValue for speed', speednatureValue);
+	}
+
 	function updateStatByEVIV() {
-		if (healthEV > 255) {
-			healthEV = 255;
+		if (savedPokemon != null) {
+			hpStat = savedPokemon.stats[0].base_stat;
+			attackStat = savedPokemon.stats[1].base_stat;
+			defenseStat = savedPokemon.stats[2].base_stat;
+			s_attackStat = savedPokemon.stats[3].base_stat;
+			s_defenseStat = savedPokemon.stats[4].base_stat;
+			speedStat = savedPokemon.stats[5].base_stat;
 		}
 
-		if (attackEV > 255) {
-			attackEV = 255;
+		// console.log(healthEV);
+
+		// code for EV portion of calculation
+
+		if (healthEV > 252) {
+			healthEV = 252;
 		}
 
-		if (defenseEV > 255) {
-			defenseEV = 255;
+		if (healthEV < 0) {
+			healthEV = 0;
 		}
 
-		if (s_attackEV > 255) {
-			s_attackEV = 255;
+		if (attackEV > 252) {
+			attackEV = 252;
 		}
 
-		if (s_defenseEV > 255) {
-			s_defenseEV = 255;
+		if (attackEV < 0) {
+			attackEV = 0;
 		}
 
-		if (speedEV > 255) {
-			speedEV = 255;
+		if (defenseEV > 252) {
+			defenseEV = 252;
 		}
 
-		disableEVInput = false;
+		if (defenseEV < 0) {
+			defenseEV = 0;
+		}
+
+		if (s_attackEV > 252) {
+			s_attackEV = 252;
+		}
+
+		if (s_attackEV < 0) {
+			s_attackEV = 0;
+		}
+
+		if (s_defenseEV > 252) {
+			s_defenseEV = 252;
+		}
+
+		if (s_defenseEV < 0) {
+			s_defenseEV = 0;
+		}
+
+		if (speedEV > 252) {
+			speedEV = 252;
+		}
+
+		if (speedEV < 0) {
+			speedEV = 0;
+		}
+
 		evsCountValue = 0;
 		evsCountValue += healthEV;
 		evsCountValue += attackEV;
@@ -93,7 +351,8 @@
 		evsCountValue += speedEV;
 
 		availableEVs = 510 - evsCountValue;
-		console.log(availableEVs);
+
+		// console.log(healthEV);
 
 		if (evsCountValue > 510) {
 			evsCountValue = 510;
@@ -136,9 +395,191 @@
 		speedEVUpdate = false;
 
 		// code for IV portion of calculation
+		if (healthIV > 31) {
+			healthIV = 31;
+		}
+
+		if (healthIV < 0) {
+			healthIV = 0;
+		}
+
+		if (attackIV > 31) {
+			attackIV = 31;
+		}
+
+		if (attackIV < 0) {
+			attackIV = 0;
+		}
+
+		if (defenseIV > 31) {
+			defenseIV = 31;
+		}
+
+		if (defenseIV < 0) {
+			defenseIV = 0;
+		}
+
+		if (s_attackIV > 31) {
+			s_attackIV = 31;
+		}
+
+		if (s_attackIV < 0) {
+			s_attackIV = 0;
+		}
+
+		if (s_defenseIV > 31) {
+			s_defenseIV = 31;
+		}
+
+		if (s_defenseIV < 0) {
+			s_defenseIV = 0;
+		}
+
+		if (speedIV > 31) {
+			speedIV = 31;
+		}
+
+		if (speedIV < 0) {
+			speedIV = 0;
+		}
+
+		// statToHealth_IV = healthIV / 2;
+		// statToAttack_IV = attackIV / 2;
+		// statToDefense_IV = defenseIV / 2;
+		// statToSAttack_IV = s_attackIV / 2;
+		// statToSDefense_IV = s_defenseIV / 2;
+		// statToSpeed_IV = speedIV / 2;
+
+		// statToHealth_IV = Math.floor(statToHealth_IV);
+		// statToAttack_IV = Math.floor(statToAttack_IV);
+		// statToDefense_IV = Math.floor(statToDefense_IV);
+		// statToSAttack_IV = Math.floor(statToSAttack_IV);
+		// statToSDefense_IV = Math.floor(statToSDefense_IV);
+		// statToSpeed_IV = Math.floor(statToSpeed_IV);
+
+		// code for checking if pokemon is equal to level 50 or 100 - just going to be lvl 50 and 100 as these are most
+		// common levels and makes the IV/EV calculation less complicated
+
+		// if (level == 50) {
+		// 	multiplierEV = 8;
+
+		// Calculation
+		// EVs
+		// 	statToHealth_EV = healthEV / multiplierEV;
+		// 	statToAttack_EV = attackEV / multiplierEV;
+		// 	statToDefense_EV = defenseEV / multiplierEV;
+		// 	statToSAttack_EV = s_attackEV / multiplierEV;
+		// 	statToSDefense_EV = s_defenseEV / multiplierEV;
+		// 	statToSpeed_EV = speedEV / multiplierEV;
+
+		// 	statToHealth_EV = Math.floor(statToHealth_EV);
+		// 	statToAttack_EV = Math.floor(statToAttack_EV);
+		// 	statToDefense_EV = Math.floor(statToDefense_EV);
+		// 	statToSAttack_EV = Math.floor(statToSAttack_EV);
+		// 	statToSDefense_EV = Math.floor(statToSDefense_EV);
+		// 	statToSpeed_EV = Math.floor(statToSpeed_EV);
+
+		// 	if (healthEV % multiplierEV >= 4) {
+		// 		statToHealth_EV += 1;
+		// 	}
+
+		// 	if (attackEV % multiplierEV >= 4) {
+		// 		statToAttack_EV += 1;
+		// 	}
+
+		// 	if (defenseEV % multiplierEV >= 4) {
+		// 		statToDefense_EV += 1;
+		// 	}
+
+		// 	if (s_attackEV % multiplierEV >= 4) {
+		// 		statToSAttack_EV += 1;
+		// 	}
+
+		// 	if (s_defenseEV % multiplierEV >= 4) {
+		// 		statToSDefense_EV += 1;
+		// 	}
+
+		// 	if (speedEV % multiplierEV >= 4) {
+		// 		statToSpeed_EV += 1;
+		// 	}
+		// }
+
+		// if (level == 100) {
+		// 	multiplierEV = 4;
+
+		// Calculation
+		// EVs
+		// statToHealth_EV = healthEV / multiplierEV;
+		// statToAttack_EV = attackEV / multiplierEV;
+		// statToDefense_EV = defenseEV / multiplierEV;
+		// statToSAttack_EV = s_attackEV / multiplierEV;
+		// statToSDefense_EV = s_defenseEV / multiplierEV;
+		// statToSpeed_EV = speedEV / multiplierEV;
+
+		// statToHealth_EV = Math.floor(statToHealth_EV);
+		// statToAttack_EV = Math.floor(statToAttack_EV);
+		// statToDefense_EV = Math.floor(statToDefense_EV);
+		// statToSAttack_EV = Math.floor(statToSAttack_EV);
+		// statToSDefense_EV = Math.floor(statToSDefense_EV);
+		// statToSpeed_EV = Math.floor(statToSpeed_EV);
+
+		// the reason why the remainders are removed from lvl 100 is because it is every 4 EV points = 1 stat point
+		// as opposed to lvl 50 where the first stat point requires 4 and afterwards requires 8 per stat point
+		// }
+
+		// console.log(healthEV);
+
+		// formulas from https://bulbapedia.bulbagarden.net/wiki/Stat
+		hpStat = Math.floor(((2 * hpStat + healthEV / 4 + statToHealth_IV) * level) / 100 + level + 10);
+		attackStat = Math.floor(
+			(((2 * attackStat + attackEV / 4 + statToAttack_IV) * level) / 100 + 5) * attacknatureValue
+		);
+		defenseStat = Math.floor(
+			(((2 * defenseStat + defenseEV / 4 + statToDefense_IV) * level) / 100 + 5) *
+				defensenatureValue
+		);
+		s_attackStat = Math.floor(
+			(((2 * s_attackStat + s_attackEV / 4 + statToSAttack_IV) * level) / 100 + 5) *
+				sattacknatureValue
+		);
+		s_defenseStat = Math.floor(
+			(((2 * s_defenseStat + s_defenseEV / 4 + statToSDefense_IV) * level) / 100 + 5) *
+				sdefensenatureValue
+		);
+		speedStat = Math.floor(
+			(((2 * speedStat + speedEV / 4 + statToSpeed_IV) * level) / 100 + 5) * speednatureValue
+		);
+		// console.log('hpStat', hpStat);
+		// console.log('level:', level);
+		// console.log('statToHealth_EV', statToHealth_EV);
+		// console.log('statToAttack_EV', statToHealth_IV);
+		// console.log('statToAttack_EV', statToAttack_EV);
+		// console.log('statToAttack_IV', statToAttack_IV);
+		// statToHealth_EV = 0;
+		// statToAttack_EV = 0;
+		// statToDefense_EV = 0;
+		// statToSAttack_EV = 0;
+		// statToSDefense_EV = 0;
+		// statToSpeed_EV = 0;
 	}
 	$: getPokemonData(selection);
-	$: updateStatByEVIV(healthEV || attackEV || defenseEV || s_attackEV || s_defenseEV || speedEV);
+	$: checkNatures(selectNature);
+	$: updateStatByEVIV(
+		healthEV ||
+			attackEV ||
+			defenseEV ||
+			s_attackEV ||
+			s_defenseEV ||
+			speedEV ||
+			healthIV ||
+			attackIV ||
+			defenseIV ||
+			s_attackIV ||
+			s_defenseIV ||
+			speedIV ||
+			level ||
+			selectNature
+	);
 	// $pokedex.getPokemonsList().then((r) => console.log(r));
 </script>
 
@@ -151,6 +592,7 @@
 			<div id="selectPokemon">
 				<select bind:value={selection}>
 					{#await $pokedex.getPokemonSpeciesList() then pokemonList}
+						<option selected="selected" disabled="disabled"></option>
 						{#each pokemonList.results as pokemon}
 							<option value={pokemon}>{pokemon.name}</option>
 						{/each}
@@ -180,10 +622,7 @@
 		</div>
 		<div id="pokemonPreview">
 			{#if preview == null}
-				<img
-					src={'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'}
-					alt="bulbasaur preview"
-				/>
+				<p>Please select a Pokemon</p>
 			{:else}
 				<img src={preview} alt="{savedPokemonInfo.name} preview" />
 			{/if}
@@ -210,12 +649,16 @@
 
 <Modal open={modalOpen2}>
 	<div class="titles">
-		<p>Name:</p>
-		<p>Pokedex No.</p>
-		<p>Gender</p>
-		<div class="description">
-			<p id="pokemonName">{savedPokemon.name}</p>
-			<p id="pokemonNumber">{pokedexNo}</p>
+		<div id="name">
+			<p>Name:</p>
+			<p>{savedPokemon.name}</p>
+		</div>
+		<div id="pokedex_number_of_pokemon">
+			<p>Pokedex No.</p>
+			<p>{pokedexNo}</p>
+		</div>
+		<div id="gender">
+			<p>Gender</p>
 			<select id="changegender">
 				<option
 					selected={unbreedable.includes(savedPokemon.name)}
@@ -235,125 +678,221 @@
 			</select>
 		</div>
 	</div>
-	<div class="stat_table_left">
-		<div id="hp">
-			<p>HP:{hpStat}</p>
+	<div id="stat_table">
+		<div id="stat_table_left">
+			<div id="hp">
+				<p>HP:{hpStat}</p>
+			</div>
+			<div id="attack"></div>
+			<p>Attack:{attackStat}</p>
+			<div id="defense">
+				<p>Defense:{defenseStat}</p>
+			</div>
+			<div id="s-attack">
+				<p>Special Attack:{s_attackStat}</p>
+			</div>
+			<div id="s-defense">
+				<p>Special Defense:{s_defenseStat}</p>
+			</div>
+			<div id="speed">
+				<p>Speed:{speedStat}</p>
+			</div>
 		</div>
-		<div id="attack"></div>
-		<p>Attack:{attackStat}</p>
-		<div id="defense">
-			<p>Defense:{defenseStat}</p>
-		</div>
-		<div id="s-attack">
-			<p>Special Attack:{s_attackStat}</p>
-		</div>
-		<div id="s-defense">
-			<p>Special Defense:{s_defenseStat}</p>
-		</div>
-		<div id="speed">
-			<p>Speed:{speedStat}</p>
-		</div>
-		<div id="available_effort_values">
-			<p>Effort Values available: {availableEVs}</p>
+		<div id="stat_table_right">
+			<div id="input_effort_values">
+				<div class="inputEVs" id="healthEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={healthEV}
+						on:input={() => {
+							healthEVUpdate = true;
+						}}
+					/>
+				</div>
+				<div class="inputEVs" id="attackEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={attackEV}
+						on:input={() => {
+							attackEVUpdate = true;
+						}}
+					/>
+				</div>
+				<div class="inputEVs" id="defenseEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={defenseEV}
+						on:input={() => {
+							defenseEVUpdate = true;
+						}}
+					/>
+				</div>
+				<div class="inputEVs" id="s_attackEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={s_attackEV}
+						on:input={() => {
+							s_attackEVUpdate = true;
+						}}
+					/>
+				</div>
+				<div class="inputEVs" id="s_defenseEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={s_defenseEV}
+						on:input={() => {
+							s_defenseEVUpdate = true;
+						}}
+					/>
+				</div>
+				<div class="inputEVs" id="speedEV">
+					<p>EVs:</p>
+					<input
+						type="number"
+						min="0"
+						max="255"
+						bind:value={speedEV}
+						on:input={() => {
+							speedEVUpdate = true;
+						}}
+					/>
+				</div>
+			</div>
+			<div id="input_individual_values">
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={healthIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={attackIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={defenseIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={s_attackIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={s_defenseIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+				<div class="IV">
+					<p class="editIVs">IVs:</p>
+					<input class="in_IVBox" type="number" min="0" max="31" bind:value={speedIV} />
+					<p class="in_IVBox">/31</p>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div id="stat_table_right">
-		<div class="inputEVs" id="healthEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={healthEV}
-				on:input={() => {
-					console.log('health Update');
-					healthEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div class="inputEVs" id="attackEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={attackEV}
-				on:input={() => {
-					console.log('attack Update');
-					attackEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div class="inputEVs" id="defenseEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={defenseEV}
-				on:input={() => {
-					console.log('defense Update');
-					defenseEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div class="inputEVs" id="s_attackEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={s_attackEV}
-				on:input={() => {
-					console.log('special attack Update');
-					s_attackEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div class="inputEVs" id="s_defenseEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={s_defenseEV}
-				on:input={() => {
-					console.log('special defense Update');
-					s_defenseEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div class="inputEVs" id="speedEV">
-			<p>EVs:</p>
-			<input
-				type="number"
-				min="0"
-				max="255"
-				disabled={disableEVInput == true}
-				bind:value={speedEV}
-				on:input={() => {
-					console.log('speed Update');
-					speedEVUpdate = true;
-				}}
-			/>
-		</div>
-		<div id="input_individual_values"></div>
-		<p class="editIVs">IVs:</p>
-	</div></Modal
->
-
-<!-- 
-Sample for predecessor to function updateEV in case it fails miserably
- on:input={() => {
-					speedEV > 255 ? (speedEV = 255) : speedEV;
-					// speedEV > evsCount ? (speedEV = 510 - evsCount) : speedEV;
-				}}
--->
+	<div id="EV_count_and_nature">
+		<p>Effort Values available: {availableEVs}</p>
+		<select bind:value={selectNature}>
+			<option selected="selected"></option>
+			{#await $pokedex.getNaturesList() then natureList}
+				{#each natureList.results as nature}
+					<option value={nature.name}>{nature.name}</option>
+				{/each}
+			{/await}
+		</select>
+	</div>
+	<!-- For now will just have togglable buttons but potentially could add an input for this instead -->
+	<div id="setLevel">
+		<button
+			disabled={level == 50 ? true : false}
+			on:click={() => {
+				level = 50;
+			}}>Level 50</button
+		>
+		<button
+			disabled={level == 100 ? true : false}
+			on:click={() => {
+				level = 100;
+			}}>Level 100</button
+		>
+	</div>
+</Modal>
 
 <style>
+	.titles {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#name {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#pokedex_number_of_pokemon {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#gender {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#stat_table {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#stat_table_left {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#stat_table_right {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#input_effort_values {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#input_individual_values {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.inputEVs {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.IV {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#EV_count_and_nature {
+		display: flex;
+		flex-direction: row;
+	}
 </style>
