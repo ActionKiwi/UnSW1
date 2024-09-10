@@ -1,6 +1,9 @@
 <script>
 	import Teambuilder from '$lib/Teambuilder.svelte';
-	export let teams = [];
+	import PokemonSelector from '$lib/PokemonSelector.svelte';
+	import { teams } from '$lib/stores.js';
+
+	// let iterableTeams = null;
 </script>
 
 <body>
@@ -20,7 +23,7 @@
         </div> -->
 	</nav>
 	<ul class="teams">
-		{#each teams as team}
+		{#each $teams as team}
 			<li class="team">
 				<input type="text" placeholder="Team Name" bind:value={team.name} />
 				<Teambuilder></Teambuilder>
@@ -29,7 +32,7 @@
 	</ul>
 	<button
 		id="new_team"
-		on:click={() => (teams = [...teams, { name: 'Untitled Team', members: [] }])}
+		on:click={() => ($teams = [...$teams, { name: 'Untitled Team', members: {} }])}
 		>+ Create a new team</button
 	>
 </body>

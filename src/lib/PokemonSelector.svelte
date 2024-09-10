@@ -116,195 +116,197 @@
 	}
 
 	async function checkNatures() {
-		selectedNature = await $pokedex.getNatureByName(selectNature);
-		attacknatureValue = 1;
-		defensenatureValue = 1;
-		sattacknatureValue = 1;
-		sdefensenatureValue = 1;
-		speednatureValue = 1;
-		// console.log(selectedNature);
-		if (selectNature != null) {
-			if (selectedNature.name == 'lonely') {
-				attacknatureValue = 1.1;
-				defensenatureValue = 0.9;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
+		if (selectNature != null || selectNature != undefined) {
+			selectedNature = await $pokedex.getNatureByName(selectNature);
+			attacknatureValue = 1;
+			defensenatureValue = 1;
+			sattacknatureValue = 1;
+			sdefensenatureValue = 1;
+			speednatureValue = 1;
+			// console.log(selectedNature);
+			if (selectNature != null) {
+				if (selectedNature.name == 'lonely') {
+					attacknatureValue = 1.1;
+					defensenatureValue = 0.9;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'adamant') {
+					attacknatureValue = 1.1;
+					sattacknatureValue = 0.9;
+					defensenatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'naughty') {
+					attacknatureValue = 1.1;
+					sdefensenatureValue = 0.9;
+					defensenatureValue = 1;
+					sattacknatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'brave') {
+					attacknatureValue = 1.1;
+					speednatureValue = 0.9;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					defensenatureValue = 1;
+				}
+
+				if (selectedNature.name == 'bold') {
+					defensenatureValue = 1.1;
+					attacknatureValue = 0.9;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'impish') {
+					defensenatureValue = 1.1;
+					attacknatureValue = 1;
+					sattacknatureValue = 0.9;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'lax') {
+					defensenatureValue = 1.1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 0.9;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'relaxed') {
+					defensenatureValue = 1.1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 0.9;
+				}
+
+				if (selectedNature.name == 'modest') {
+					defensenatureValue = 1;
+					attacknatureValue = 0.9;
+					sattacknatureValue = 1.1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'mild') {
+					defensenatureValue = 0.9;
+					attacknatureValue = 1;
+					sattacknatureValue = 1.1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'rash') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1.1;
+					sdefensenatureValue = 0.9;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'quiet') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1.1;
+					sdefensenatureValue = 1;
+					speednatureValue = 0.9;
+				}
+
+				if (selectedNature.name == 'calm') {
+					defensenatureValue = 1;
+					attacknatureValue = 0.9;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1.1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'gentle') {
+					defensenatureValue = 0.9;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1.1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'careful') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 0.9;
+					sdefensenatureValue = 1.1;
+					speednatureValue = 1;
+				}
+
+				if (selectedNature.name == 'sassy') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1.1;
+					speednatureValue = 0.9;
+				}
+
+				if (selectedNature.name == 'timid') {
+					defensenatureValue = 1;
+					attacknatureValue = 0.9;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1.1;
+				}
+
+				if (selectedNature.name == 'hasty') {
+					defensenatureValue = 0.9;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1.1;
+				}
+
+				if (selectedNature.name == 'jolly') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 0.9;
+					sdefensenatureValue = 1;
+					speednatureValue = 1.1;
+				}
+
+				if (selectedNature.name == 'naive') {
+					defensenatureValue = 1;
+					attacknatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 0.9;
+					speednatureValue = 1.1;
+				}
+
+				if (
+					selectedNature.name == 'hardy' ||
+					selectedNature.name == 'docile' ||
+					selectedNature.name == 'serious' ||
+					selectedNature.name == 'bashful' ||
+					selectedNature.name == 'quirky'
+				) {
+					attacknatureValue = 1;
+					defensenatureValue = 1;
+					sattacknatureValue = 1;
+					sdefensenatureValue = 1;
+					speednatureValue = 1;
+				}
 			}
 
-			if (selectedNature.name == 'adamant') {
-				attacknatureValue = 1.1;
-				sattacknatureValue = 0.9;
-				defensenatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'naughty') {
-				attacknatureValue = 1.1;
-				sdefensenatureValue = 0.9;
-				defensenatureValue = 1;
-				sattacknatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'brave') {
-				attacknatureValue = 1.1;
-				speednatureValue = 0.9;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				defensenatureValue = 1;
-			}
-
-			if (selectedNature.name == 'bold') {
-				defensenatureValue = 1.1;
-				attacknatureValue = 0.9;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'impish') {
-				defensenatureValue = 1.1;
-				attacknatureValue = 1;
-				sattacknatureValue = 0.9;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'lax') {
-				defensenatureValue = 1.1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 0.9;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'relaxed') {
-				defensenatureValue = 1.1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 0.9;
-			}
-
-			if (selectedNature.name == 'modest') {
-				defensenatureValue = 1;
-				attacknatureValue = 0.9;
-				sattacknatureValue = 1.1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'mild') {
-				defensenatureValue = 0.9;
-				attacknatureValue = 1;
-				sattacknatureValue = 1.1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'rash') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1.1;
-				sdefensenatureValue = 0.9;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'quiet') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1.1;
-				sdefensenatureValue = 1;
-				speednatureValue = 0.9;
-			}
-
-			if (selectedNature.name == 'calm') {
-				defensenatureValue = 1;
-				attacknatureValue = 0.9;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1.1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'gentle') {
-				defensenatureValue = 0.9;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1.1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'careful') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 0.9;
-				sdefensenatureValue = 1.1;
-				speednatureValue = 1;
-			}
-
-			if (selectedNature.name == 'sassy') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1.1;
-				speednatureValue = 0.9;
-			}
-
-			if (selectedNature.name == 'timid') {
-				defensenatureValue = 1;
-				attacknatureValue = 0.9;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1.1;
-			}
-
-			if (selectedNature.name == 'hasty') {
-				defensenatureValue = 0.9;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1.1;
-			}
-
-			if (selectedNature.name == 'jolly') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 0.9;
-				sdefensenatureValue = 1;
-				speednatureValue = 1.1;
-			}
-
-			if (selectedNature.name == 'naive') {
-				defensenatureValue = 1;
-				attacknatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 0.9;
-				speednatureValue = 1.1;
-			}
-
-			if (
-				selectedNature.name == 'hardy' ||
-				selectedNature.name == 'docile' ||
-				selectedNature.name == 'serious' ||
-				selectedNature.name == 'bashful' ||
-				selectedNature.name == 'quirky'
-			) {
-				attacknatureValue = 1;
-				defensenatureValue = 1;
-				sattacknatureValue = 1;
-				sdefensenatureValue = 1;
-				speednatureValue = 1;
-			}
+			// console.log('selectedNature', selectedNature);
+			// console.log('natureValue for attack', attacknatureValue);
+			// console.log('natureValue for defense', defensenatureValue);
+			// console.log('natureValue for special attack', sattacknatureValue);
+			// console.log('natureValue for special defense', sdefensenatureValue);
+			// console.log('natureValue for speed', speednatureValue);
 		}
-
-		// console.log('selectedNature', selectedNature);
-		// console.log('natureValue for attack', attacknatureValue);
-		// console.log('natureValue for defense', defensenatureValue);
-		// console.log('natureValue for special attack', sattacknatureValue);
-		// console.log('natureValue for special defense', sdefensenatureValue);
-		// console.log('natureValue for speed', speednatureValue);
 	}
 
 	function updateStatByEVIV() {
