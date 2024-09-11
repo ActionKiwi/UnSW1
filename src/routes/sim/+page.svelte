@@ -1,6 +1,6 @@
 <script>
-	let modalOpen = false;
 	import Modal from '$lib/Modal.svelte';
+	import { teams } from '$lib/stores.js';
 	let teamModal1Open = false;
 	let teamModal2Open = false;
 </script>
@@ -8,10 +8,10 @@
 <nav>
 	<div id="left_navigation">
 		<div class="navigation">
-			<a data-sveltekit-reload href="/sim">Simulation</a>
+			<a href="/sim">Simulation</a>
 		</div>
 		<div class="navigation">
-			<a data-sveltekit-reload href="/team">Teams</a>
+			<a href="/team">Teams</a>
 		</div>
 	</div>
 	<div id="right_navigation">
@@ -35,10 +35,12 @@
 	</div>
 	<div id="treset">
 		<div class="select_team">
-			<button id="pop_up" on:click={(teamModal1Open = false)}>Select Team 1</button>
+			<button id="pop_up" on:click={() => ((teamModal1Open = false), console.log($teams))}
+				>Select Team 1</button
+			>
 		</div>
 		<div class="select_team">
-			<button id="pop_up" on:click={teamModal2Open}>Select Team 2</button>
+			<button id="pop_up" on:click={() => (teamModal2Open = false)}>Select Team 2</button>
 		</div>
 		<button>Reset</button>
 	</div>
@@ -133,13 +135,5 @@
 	.select_team {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.selectpokemonLeft {
-		justify-content: space-evenly;
-	}
-
-	.selectpokemonRight {
-		justify-content: space-evenly;
 	}
 </style>

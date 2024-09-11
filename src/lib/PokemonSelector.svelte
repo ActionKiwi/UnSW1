@@ -899,7 +899,7 @@
 				on:click={() => {
 					generationOpen = false;
 					modalOpen1 = true;
-					console.log(generations);
+					// console.log(generations);
 				}}>Confirm</button
 			>
 		</div>
@@ -1027,7 +1027,7 @@
 					class="confirmSelection"
 					disabled={selection == null || selection == undefined}
 					on:click={() => {
-						console.log(checkvarieties, savedPokemon, checkvarieties == {});
+						// console.log(checkvarieties, savedPokemon, checkvarieties == {});
 						if (!checkvarieties?.name) {
 							checkvarieties = savedPokemon;
 						}

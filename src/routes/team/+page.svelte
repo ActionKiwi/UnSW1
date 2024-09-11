@@ -4,16 +4,21 @@
 	import { teams } from '$lib/stores.js';
 
 	// let iterableTeams = null;
+	function logMeStuff() {
+		console.log($teams);
+	}
+
+	$: logMeStuff($teams);
 </script>
 
 <body>
 	<nav>
 		<div id="left_navigation">
 			<div class="navigation">
-				<a data-sveltekit-reload href="/sim">Simulation</a>
+				<a href="/sim">Simulation</a>
 			</div>
 			<div class="navigation">
-				<a data-sveltekit-reload href="/team">Teams</a>
+				<a href="/team">Teams</a>
 			</div>
 		</div>
 		<!-- <div id="right_navigation">
@@ -25,14 +30,12 @@
 	<ul class="teams">
 		{#each $teams as team}
 			<li class="team">
-				<input type="text" placeholder="Team Name" bind:value={team.name} />
-				<Teambuilder></Teambuilder>
+				<input type="text" placeholder="Enter Team Name Here" bind:value={team.name} />
+				<Teambuilder bind:member={team.members}></Teambuilder>
 			</li>
 		{/each}
 	</ul>
-	<button
-		id="new_team"
-		on:click={() => ($teams = [...$teams, { name: 'Untitled Team', members: {} }])}
+	<button id="new_team" on:click={() => ($teams = [...$teams, { name: '', members: {} }])}
 		>+ Create a new team</button
 	>
 </body>
