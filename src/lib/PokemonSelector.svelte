@@ -19,8 +19,6 @@
 	let selection = null;
 	let stagedChanges = {};
 	let checkvarieties = {};
-	// export let value = null;
-	let formSelection = null;
 	let pokedexNo = null;
 	// savedPokemonInfo acts as my 'cosmetic' information such as name and pokedex id for the creation of the pokemon (front-end)
 	// This is because savedPokemon is the back-end charactaristics such as stats and forms. By using $pokedex.getPSBY() (see below)
@@ -64,7 +62,6 @@
 	let selectNature = null;
 	let selectedNature = null;
 	let moveSlot = null;
-	let moveChanging = null;
 	let move1 = {};
 	let move2 = {};
 	let move3 = {};
@@ -91,20 +88,21 @@
 	let pokedexPaldea = null;
 	let pokedexKitakami = null;
 	let pokedexBlueberry = null;
-	let hideListItem = false;
 	let searchForPokemon = '';
-	// add list of pokemon in dlcs available
 
 	async function getPokemonData() {
 		if (selection) {
-			formSelection = selection;
 			savedPokemonInfo = await $pokedex.getPokemonSpeciesByName(selection.name);
 			savedPokemon = await $pokedex.getPokemon(selection.name);
+			// this if statement accounts for if there is an option there shouldn't be or if the pokemon information in the api is
+			// incomplete
 			if (selection.name != undefined) {
+				// gets the pokedex number in the national dex
 				nationalDex = savedPokemonInfo.pokedex_numbers[0];
 				pokedexNo = nationalDex.entry_number;
 				preview = savedPokemon.sprites.front_default;
 				varieties = savedPokemonInfo.varieties;
+				// gets the base stat for each stat (base stat is the default number ceteris parabis)
 				hpStat = savedPokemon.stats[0].base_stat;
 				attackStat = savedPokemon.stats[1].base_stat;
 				defenseStat = savedPokemon.stats[2].base_stat;
@@ -116,14 +114,18 @@
 	}
 
 	async function checkNatures() {
+		// prevents .getNatureByName returning an error as it would run before stores.js causing crashes
 		if (selectNature != null || selectNature != undefined) {
+			// what you select in the natures drop down select would then be pulled from the api (makes formatting the select easier)
 			selectedNature = await $pokedex.getNatureByName(selectNature);
+			// sets the base stat multiplier to default (*1)
 			attacknatureValue = 1;
 			defensenatureValue = 1;
 			sattacknatureValue = 1;
 			sdefensenatureValue = 1;
 			speednatureValue = 1;
-			// console.log(selectedNature);
+			// brute forced solution to change the multiplier. previous idea was to use 'increased stat:' and 'decreased stat:' but
+			// this doesn't work for each nature
 			if (selectNature != null) {
 				if (selectedNature.name == 'lonely') {
 					attacknatureValue = 1.1;
@@ -310,6 +312,7 @@
 	}
 
 	function updateStatByEVIV() {
+		// makes the stat gotten in getPokemonData() editable
 		if (savedPokemon != null) {
 			hpStat = savedPokemon.stats[0].base_stat;
 			attackStat = savedPokemon.stats[1].base_stat;
@@ -318,11 +321,11 @@
 			s_defenseStat = savedPokemon.stats[4].base_stat;
 			speedStat = savedPokemon.stats[5].base_stat;
 		}
-
-		// console.log(healthEV);
-
 		// code for EV portion of calculation
 
+		// in the games, a pokemon can have a maximum of 255 effort values (EVs) in each stat. At level 100, every 4 evs give a stat
+		// point, meaning that would total to 256, which is not allowed with the total of 510 EVs overall. This sets it to the
+		// maximum viable and minimum viable number if it exceeds 252 or is lower than 0 respectively.
 		if (healthEV > 252) {
 			healthEV = 252;
 		}
@@ -371,6 +374,7 @@
 			speedEV = 0;
 		}
 
+		// Totals the user inputs for each stat, and subtracts that from 510 to determine how many can still be allocated.
 		evsCountValue = 0;
 		evsCountValue += healthEV;
 		evsCountValue += attackEV;
@@ -381,11 +385,17 @@
 
 		availableEVs = 510 - evsCountValue;
 
-		// console.log(healthEV);
-
+		// evsCountValue will exceed 510 as it does not get reset while the modal is open, so if the number exceeds 510 it is reset so that
+		// availableEVs is not inaccurate once an input of higher than 252 is typed in the input
+		// (e.g if extra 0 is entered for 100:
+		// 1000 healthEV means 1000 evsCountValue, availableEVs is -490 and input is disabled, even though the visual number reads 100)
 		if (evsCountValue > 510) {
 			evsCountValue = 510;
 		}
+
+		// if availableEVs is below 0 i.e negative, instead of using the CountValue method it is reverse engineered directly from
+		// the inputs. This is done only when it is 0 or below as for the split second where input = 1000 (using previous example)
+		// it would alter every ev and break.
 		if (availableEVs <= 0) {
 			availableEVs = 0;
 			if (healthEVUpdate == true) {
@@ -424,6 +434,10 @@
 		speedEVUpdate = false;
 
 		// code for IV portion of calculation
+
+		// In the games, a pokemon can have 0-31 IVs from worst to best in a stat. At Level 100, an IV increases the corresponding
+		// stat by 1. Same logic used for resetting the EVs if they exceed the required input, but without the count value as
+		// a pokemon can have 31 IVs in every stat independent of other inputs and so does not need to be derived from a total of 186
 		if (healthIV > 31) {
 			healthIV = 31;
 		}
@@ -473,6 +487,8 @@
 		}
 
 		// formulas from https://bulbapedia.bulbagarden.net/wiki/Stat
+
+		// takes every variable involved in determining final stat and returns the final amount in a variable.
 		hpStat = Math.floor(((2 * hpStat + healthEV / 4 + healthIV) * level) / 100 + level + 10);
 		attackStat = Math.floor(
 			(((2 * attackStat + attackEV / 4 + attackIV) * level) / 100 + 5) * attacknatureValue
@@ -492,6 +508,8 @@
 		);
 	}
 
+	// changeMove() will respond to where the selected move from MoveSelector.svelte will be replacing the previous text in the button
+	// for selecting a move
 	function changeMove() {
 		if (stagedChanges != null) {
 			if (moveSlot == 1) {
@@ -508,11 +526,12 @@
 		}
 	}
 
+	// resets all variables to default/no input
+	// **in future may add a clearPokemonMinor, Middle, Maximum for the different stages of clearing with Minor being to go back to pokemon select, Middle going back to generation select and Major going back to default values.**
 	function clearPokemon() {
 		selection = null;
 		savedPokemon = null;
 		savedPokemonInfo = null;
-		formSelection = null;
 		nationalDex = null;
 		pokedexNo = null;
 		preview = null;
@@ -532,6 +551,7 @@
 	}
 
 	function savePokemon() {
+		// creates an object 'pokemon' and clones the pokemon information from the entire component as properties.
 		pokemon.saved = structuredClone(savedPokemon);
 		pokemon.info = structuredClone(savedPokemonInfo);
 		pokemon.nationalDex = savedPokemonInfo.pokedex_numbers[0];
@@ -544,6 +564,9 @@
 		pokemon.s_attackStat = s_attackStat;
 		pokemon.s_defenseStat = s_defenseStat;
 		pokemon.speedStat = speedStat;
+		// The api doesn't have capitalised letters for each form, so this adds the prefix/suffix/both to the name.
+		// Some of these forms are unobtainable without a held item. When they are added the held item will be saved as an
+		// attribute as well, and will be the default item if an illegal form is chosen (i.e Megas/Primal Reversions)
 		pokemon.displayName = pokemon.info.names.find((i) => i.language.name == 'en').name;
 		if (pokemon.saved.name.includes('mega')) {
 			pokemon.displayName = 'Mega ' + pokemon.displayName;
@@ -585,9 +608,8 @@
 				pokemon.displayName = 'Paldean ' + pokemon.displayName + ' (Aqua)';
 			}
 		} else {
-			pokemon.displayName = pokemon.displayName = pokemon.info.names.find(
-				(i) => i.language.name == 'en'
-			).name;
+			// some pokemon don't have different forms (yet), so will use the default english name.
+			pokemon.displayName = pokemon.info.names.find((i) => i.language.name == 'en').name;
 		}
 
 		pokemon.nature = selectedNature;
@@ -600,15 +622,23 @@
 		pokemon.move2 = move2;
 		pokemon.move3 = move3;
 		pokemon.move4 = move4;
+		// clearPokemon means that once each property has been successfully cloned the button will return users to the default
+		// 'select generation' modal. Referring back to possible minor middle major clearing, this would be a complete clear.
+		// depending on feedback may change this so that the original values remain unchanged so that people can make quick edits
+		// if they (unlikely) click the confirm button too early
 		clearPokemon();
 	}
 
+	// the following filters pokemon able to be chosen in the pokemon select modal by the generation selected in the previous modal
 	async function crossReferenceGeneration() {
 		if (generations != null || generations != undefined) {
 			availablePokemon = [];
 			if (generations != 'All' && generations.version_groups != undefined) {
 				generations.version_groups.forEach(async (self) => {
 					version_group = await $pokedex.getVersionGroupByName(self.name);
+					// As each generation has 2 or more games, searching via the version_group endpoint would result in duplicates
+					// so this uses the pokedex endpoint and then cross checks it with the version_group in the pokedex entry.
+					// if the pokemon from the first version is already present, the pokemon from the second will not be (they are identical)
 					if (version_group.pokedexes.find((i) => i.name == 'kanto')) {
 						pokedexKanto = await $pokedex.getPokedexByName('kanto');
 						pokedexKanto.pokemon_entries.forEach((self) => {
@@ -619,6 +649,9 @@
 							}
 						});
 					}
+
+					// some games have been remade to feature pokemon from later games, such as johto. original-johto refers to
+					// the games 'Gold', 'Silver' and 'Crystal', while updated-johto refers to 'HeartGold' and 'SoulSilver'
 					if (version_group.pokedexes.find((i) => i.name == 'original-johto')) {
 						pokedexJohto = await $pokedex.getPokedexByName('original-johto');
 						pokedexJohto.pokemon_entries.forEach((self) => {
@@ -669,6 +702,10 @@
 							}
 						});
 					}
+
+					// Unova (Black and White) received remakes that expanded on the pokedex in the same generation (Generation V)
+					// which where Black 2 and White 2. This means that it will just go through the updated version instead of both,
+					// as the updated version only adds. This is also true for Sun and Moon (alola)
 					if (version_group.pokedexes.find((i) => i.name == 'updated-unova')) {
 						pokedexUnova = await $pokedex.getPokedexByName('updated-unova');
 						pokedexUnova.pokemon_entries.forEach((self) => {
@@ -679,6 +716,8 @@
 							}
 						});
 					}
+
+					// Kalos (Generation VI (6)) doesn't have one pokedex so all have to be looked through when Generation VI is selected
 					if (version_group.pokedexes.find((i) => i.name == 'kalos-mountain')) {
 						pokedexKalos_mountain = await $pokedex.getPokedexByName('kalos-mountain');
 						pokedexKalos_mountain.pokemon_entries.forEach((self) => {
@@ -739,6 +778,8 @@
 							}
 						});
 					}
+					// DLCs (Isle of Armor, Crown Tundra, Teal Mask (kitakami), Indigo Disk (blueberry)) all have their own pokedexes so they
+					// are also added separately.
 					if (version_group.pokedexes.find((i) => i.name == 'isle-of-armor')) {
 						pokedexIsleOfArmor = await $pokedex.getPokedexByName('isle-of-armor');
 						pokedexIsleOfArmor.pokemon_entries.forEach((self) => {
@@ -814,28 +855,9 @@
 				});
 			}
 		}
-
-		// console.log('actually doing something', generations);
-
-		// if (generations != null || generations != undefined) {
-		// 	console.log('stop it you stupid piece of code', generations.version_groups);
-		// 	if (generations.version_groups != undefined || generations.version_groups != null) {
-		// 		versionList = [];
-		// 		console.log(generations.version_groups.version);
-		// 		console.log('should be empty', versionList);
-		// 		generations.version_groups.forEach(async () => {
-		// 			version_group = await $pokedex.getVersionGroupByName(
-		// 				generations.version_groups.find((i) => i.name)
-		// 			);
-		// 			version = await $pokedex.getVersionByName(version_group.versions.name);
-		// 			console.log('dont mind me', version);
-		// 			versionList.push(version);
-		// 		});
-		// 		console.log('should be the same thing as dont mind me', versionList);
-		// 	}
-		// }
 	}
 
+	// runs the respective function whenever the variable in the brackets updates
 	$: getPokemonData(selection);
 	$: checkNatures(selectNature);
 	$: updateStatByEVIV(
@@ -864,10 +886,12 @@
 	// $pokedex.getPokemonsList().then((r) => console.log(r));
 </script>
 
+<!-- Opens the generation modal -->
 <button class="add_to_team" on:click={() => (generationOpen = true)}>
 	{#if pokemon.saved == null || pokemon.saved == undefined}
 		<p>Position {teamPosition}</p>
 	{:else}
+		<!-- if a pokemon has been selected previously, its name and front sprite will be displayed instead of the Position number -->
 		<p>{pokemon.displayName}</p>
 		<img src={pokemon.preview} alt="{pokemon.displayName} preview" />
 	{/if}</button
@@ -875,6 +899,7 @@
 
 <Modal open={generationOpen}>
 	<div>
+		<!-- select generation -->
 		<select bind:value={generations} id="selectGen">
 			{#await $pokedex.getGenerationsList() then generationList}
 				<option selected="selected"></option>
@@ -889,34 +914,40 @@
 			{/await}
 		</select>
 		<div id="closeConfirm">
+			<!-- closes the modal -->
 			<button
 				on:click={() => {
 					generationOpen = false;
 				}}>Close</button
 			>
+			<!-- closes the modal and opens the next one. If no valid generation is selected or a generation has not been selected the user is unable to move on -->
 			<button
 				disabled={generations == null || generations == undefined}
 				on:click={() => {
 					generationOpen = false;
 					modalOpen1 = true;
-					// console.log(generations);
 				}}>Confirm</button
 			>
 		</div>
 	</div>
 </Modal>
 
+<!-- Select a pokemon -->
 <Modal open={modalOpen1} scrollable={modalScrollable1}>
 	<!-- Stuff on flow charts (list of pokemon) -->
 	<div id="rowdivforselect">
 		<div id="coldivforoptions">
 			<div id="selectPokemon">
 				<ul class="searchable_select">
+					<!-- Gets list of every pokemon -->
 					{#await $pokedex.getPokemonSpeciesList() then pokemonList}
+						<!-- input for filtering pokemon by name -->
+						<!-- <select> can't be easily used for this purpose without another library -->
 						<li>
 							<input bind:value={searchForPokemon} type="text" placeholder="Search" />
 						</li>
 						{#each pokemonList.results as pokemon_results}
+							<!-- Gets the species of each pokemon to filter using the pokedex function and display proper name -->
 							{#await $pokedex.getPokemonSpeciesByName(pokemon_results.name) then pokemonData}
 								<!-- Doing same thing as in moves to get proper names etc. -->
 								{#if pokemonData != null || pokemonData != undefined}
@@ -930,10 +961,6 @@
 												>
 											</li>
 										{/if}
-										<!-- <option value={pokemon_results}
-											>{pokemonData.names.find((i) => i.language.name == 'en').name}</option  <--- This is previous code to make sure I haven't completely
-											mucked this up.
-										> -->
 									{/if}
 								{/if}
 							{/await}
@@ -942,6 +969,7 @@
 				</ul>
 			</div>
 		</div>
+		<!-- Adds the front sprite of the pokemon so users can see what it looks like in case they are looking for a different pokemon -->
 		<div id="right_side_of_select">
 			<div id="pokemonPreview">
 				{#if preview == null}
@@ -950,6 +978,8 @@
 					<img id="pokeImg" src={preview} alt="{savedPokemonInfo.name} preview" />
 				{/if}
 			</div>
+			<!-- if there is more than one form this will alter the savedPokemon variable to reflect the form change, while the species
+			will stay the same as that is unchanged regardless of form -->
 			<div id="changeForm">
 				{#if varieties != null}
 					{#if savedPokemonInfo.varieties.length > 1}
@@ -967,6 +997,7 @@
 									speedStat = savedPokemon.stats[4].base_stat;
 								}}
 							>
+								<!-- same thing as pokedex modal -->
 								{#if variety.pokemon.name.includes('mega')}
 									Mega {savedPokemonInfo.names.find((i) => i.language.name == 'en').name}
 									{#if variety.pokemon.name.includes('-x')}
@@ -1015,6 +1046,7 @@
 			</div>
 
 			<div id="bottomRow">
+				<!-- button that both closes the modal and clears the savedPokemon and savedPokemonInfo variables if the user has made a selection -->
 				<button
 					class="closeModal"
 					on:click={() => {
@@ -1023,11 +1055,11 @@
 					}}
 					>Close
 				</button>
+				<!-- button that will alter savedPokemon if another form is selected -->
 				<button
 					class="confirmSelection"
 					disabled={selection == null || selection == undefined}
 					on:click={() => {
-						// console.log(checkvarieties, savedPokemon, checkvarieties == {});
 						if (!checkvarieties?.name) {
 							checkvarieties = savedPokemon;
 						}
@@ -1044,6 +1076,7 @@
 <Modal open={modalOpen2} scrollable={modalScrollable2}>
 	<div class="titles">
 		<div id="name">
+			<!-- Pokemon name -->
 			<p>Name:</p>
 			<p>
 				{#if savedPokemon.name.includes('mega')}
@@ -1089,10 +1122,13 @@
 				{/if}
 			</p>
 		</div>
+		<!-- National Pokedex number -->
 		<div id="pokedex_number_of_pokemon">
 			<p>Pokedex No.</p>
 			<p>{pokedexNo}</p>
 		</div>
+		<!-- change gender of pokemon. Some pokemon don't have a gender (such as legendary pokemon) or can only be male or female
+		(such as Nidoran ♂, Nidoran ♀, Nidorino, Nidorina, Nidoking, Nidoqueen) and so invalid options are unselectable -->
 		<div id="gender">
 			<p>Gender</p>
 			<select id="changegender">
@@ -1114,6 +1150,7 @@
 			</select>
 		</div>
 	</div>
+	<!-- displays stat value -->
 	<div id="stat_table">
 		<div id="stat_table_left">
 			<div id="hp">
@@ -1134,10 +1171,12 @@
 				<p>Speed:{speedStat}</p>
 			</div>
 		</div>
+		<!-- inputs for effort and individual values to be used in the updateStatByEVIV() function -->
 		<div id="stat_table_right">
 			<div id="input_effort_values">
 				<div class="inputEVs" id="healthEV">
 					<p>EVs:</p>
+					<!-- input can only be a valid number -->
 					<input
 						type="number"
 						min="0"
@@ -1244,8 +1283,10 @@
 		</div>
 	</div>
 
+	<!-- displays EVs left for the user -->
 	<div id="EV_count_and_nature">
 		<p>Effort Values available: {availableEVs}</p>
+		<!-- drop down for natures in the checkNatures() function -->
 		<select bind:value={selectNature}>
 			<option selected="selected"></option>
 			{#await $pokedex.getNaturesList() then natureList}
@@ -1255,8 +1296,11 @@
 			{/await}
 		</select>
 	</div>
-	<!-- For now will just have togglable buttons but potentially could add an input for this instead -->
+	<!-- Select pokemon level -->
+	<!-- For now will just have togglable buttons but potentially could add an input for this instead depending on feedback -->
 	<div id="setLevel">
+		<!-- buttons are disabled if they are already selected. this is due to there being no visual indicator other than the stat
+		values updating which level the user selects, so being able to see the greyed out/indented button would be useful for indentification -->
 		<button
 			disabled={level == 50 ? true : false}
 			on:click={() => {
@@ -1272,12 +1316,16 @@
 	</div>
 	<div id="moves">
 		<div class="selectMove">
+			<!-- these four buttons recreate the button from MoveSelector.svelte in the edit pokemon modal for selecting moves. 
+			as in the games two identical moves cannot be learnt by a pokemon the same is true here.-->
 			<button
 				on:click={() => {
+					// Opens the move selection modal and sets the updating button to 1-4.
 					modalOpen3 = true;
 					moveSlot = 1;
 				}}
 			>
+				<!-- if a move has already been selected -->
 				{#if move1.names != undefined}
 					<div class="move-summary">
 						<div class="move-title">
@@ -1313,6 +1361,7 @@
 						<div class="move-power-points">{move1.pp}</div>
 					</div>
 				{:else}
+					<!-- If no move has already been selected -->
 					<p>Please select a move</p>
 				{/if}
 			</button>
@@ -1454,6 +1503,7 @@
 		</div>
 	</div>
 	<div id="confirm/close">
+		<!-- button that closes the modal and clears the value. In future this could be a middle clear -->
 		<button
 			class="close"
 			on:click={() => {
@@ -1461,10 +1511,13 @@
 				clearPokemon();
 			}}>Cancel</button
 		>
+		<!-- confirm pokemon creation -->
 		<button
 			class="confirm"
 			on:click={() => {
 				modalOpen2 = false;
+				// if there is no nature selected or the pokemon knows no moves, an error message will appear prompting the user
+				// to check if they have selected a nature and/or at least one move
 				if (
 					selectedNature == undefined ||
 					(move1 == {} && move2 == {} && move3 == {} && move4 == {})
@@ -1478,6 +1531,7 @@
 	</div>
 </Modal>
 
+<!-- move selector variables that are created in MoveSelector.svelte used in PokemonSelector.svelte and/or its parents -->
 <MoveSelector
 	bind:stagedChanges
 	bind:modalOpen3
@@ -1489,6 +1543,7 @@
 	bind:generations
 ></MoveSelector>
 
+<!-- Error message text -->
 <Modal open={errorMessage}>
 	<p>
 		! This action cannot be completed as there are some missing fields. Check to see if you have:<br
